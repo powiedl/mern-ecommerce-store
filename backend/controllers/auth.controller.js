@@ -131,7 +131,7 @@ export const refreshToken = async (req, res) => {
   }
 };
 
-const getProfile = async (req, res) => {
+export const getProfile = async (req, res) => {
   try {
     res.json({ message: 'endpoint is not implemented yet' });
   } catch (error) {}

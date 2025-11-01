@@ -7,6 +7,9 @@ const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 const MONGO_URI = process.env.MONGO_URI;
 const UPSTASH_REDIS_URL = process.env.UPSTASH_REDIS_URL;
+const CLOUDINARY_CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
+const CLOUDINARY_API_KEY = process.env.CLOUDINARY_API_KEY;
+const CLOUDINARY_API_SECRET = process.env.CLOUDINARY_API_SECRET;
 
 if (!ACCESS_TOKEN_SECRET) {
   console.log('Error: Missing environment variable ACCESS_TOKEN_SECRET');
@@ -24,6 +27,18 @@ if (!UPSTASH_REDIS_URL) {
   console.log('Missing UPSTASH_REDIS_URL environment variable');
   process.exit(1);
 }
+if (!CLOUDINARY_CLOUD_NAME) {
+  console.log('Missing environment variable CLOUDINARY_CLOUD_NAME');
+  process.exit(1);
+}
+if (!CLOUDINARY_API_KEY) {
+  console.log('Missing environment variable CLOUDINARY_API_KEY');
+  process.exit(1);
+}
+if (!CLOUDINARY_API_SECRET) {
+  console.log('Missing environment variable CLOUDINARY_API_SECRET');
+  process.exit(1);
+}
 
 export default {
   PORT,
@@ -32,4 +47,7 @@ export default {
   MONGO_URI,
   UPSTASH_REDIS_URL,
   NODE_ENV,
+  CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
 };
