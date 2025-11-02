@@ -1,5 +1,6 @@
 const Input = ({
   label,
+  type = 'text',
   Icon = null,
   placeholder = 'placeholder',
   value,
@@ -15,7 +16,7 @@ const Input = ({
           {Icon}
         </div>
         <input
-          type='text'
+          type={type}
           id='name'
           required
           value={value}
