@@ -28,7 +28,7 @@ const setCookies = (res, accessToken, refreshToken) => {
     httpOnly: true, //prevent XSS attacks,
     secure: NODE_ENV === 'production',
     sameSite: 'strict', // prevents CSRF attacks
-    maxAge: 60 * 60 * 1000, // 60 minutes in milliseconds
+    maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
   });
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true, //prevent XSS attacks,
@@ -118,7 +118,7 @@ export const refreshToken = async (req, res) => {
       ACCESS_TOKEN_SECRET,
       { expiresIn: '15m' }
     );
-    res.cookie('accessToken', {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       secure: NODE_ENV === 'production',
       sameSite: 'strict',
