@@ -63,7 +63,7 @@ export const deleteProduct = async (req, res) => {
       const publicId = product.image.split('/').pop().split('.')[0]; // this will get the id of the image (it is the "base" filename of product.image)
       try {
         await cloudinary.uploader.destroy(`products/${publicId}`);
-        console.log(`deleted image 'products/$publicId' from cloudinary`);
+        console.log(`deleted image 'products/${publicId}' from cloudinary`);
       } catch (error) {
         console.log(
           `Error in delete image 'products/${publicId}' from cloudinary in deleteProduct controller: ${error.message}`
@@ -123,6 +123,7 @@ export const toggleFeaturedProduct = async (req, res) => {
     product.isFeatured = !product.isFeatured;
     const updatedProduct = await product.save();
     await updateFeaturedProductsCache();
+
     res.json({ product: updatedProduct });
   } catch (error) {
     console.log('Error in toggleFeaturedProduct controller:', error.message);

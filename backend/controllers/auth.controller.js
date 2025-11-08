@@ -28,7 +28,7 @@ const setCookies = (res, accessToken, refreshToken) => {
     httpOnly: true, //prevent XSS attacks,
     secure: NODE_ENV === 'production',
     sameSite: 'strict', // prevents CSRF attacks
-    maxAge: 15 * 60 * 1000, // 15 minutes in milliseconds
+    maxAge: 60 * 60 * 1000, // 60 minutes in milliseconds
   });
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true, //prevent XSS attacks,
