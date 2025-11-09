@@ -18,6 +18,7 @@ export const protectRoute = async (req, res, next) => {
       if (!user) {
         return res.status(401).json({ message: 'Unknown user' });
       }
+      //console.log('protectRoute,user', user);
       req.user = user;
       return next();
     } catch (error) {

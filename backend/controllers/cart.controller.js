@@ -56,7 +56,7 @@ export const updateQuantity = async (req, res) => {
   try {
     const { id: productId } = req.params;
     const { quantity } = req.body;
-    const { user } = req.user;
+    const { user } = req;
     const existingItem = user.cartItems.find((item) => item.id === productId);
     if (existingItem) {
       if (quantity === 0) {

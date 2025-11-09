@@ -1,9 +1,11 @@
 import toast from 'react-hot-toast';
 import { ShoppingCart } from 'lucide-react';
 import { useUserStore } from '../stores/useUserStore';
+import { useCartStore } from '../stores/useCartStore';
 
 const ProductCard = ({ product }) => {
   const { user } = useUserStore();
+  const { addToCart } = useCartStore();
   const handleAddToCart = (e) => {
     e.preventDefault();
     if (!user) {
@@ -12,10 +14,9 @@ const ProductCard = ({ product }) => {
       });
       return;
     } else {
-      // add to cart
+      addToCart(product);
     }
   };
-  console.log(product);
   return (
     <div className='flex w-full relative flex-col overflow-hidden rounded-lg border border-gray-700 shadow-lg'>
       <div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
