@@ -13,7 +13,6 @@ export const useCartStore = create((set, get) => ({
   getCartItems: async () => {
     try {
       set({ loading: true });
-      console.log('get cart');
       const res = await axios.get('/cart');
       set({ cart: res.data });
       get().calculateTotals();
@@ -46,6 +45,9 @@ export const useCartStore = create((set, get) => ({
     } catch (error) {
       toast.error(error?.response?.data?.message || 'An error occured');
     }
+  },
+  clearCart: async () => {
+    set({ cart: [], coupon: null, total: 0, subtotal: 0 });
   },
   removeFromCart: async (productId) => {
     try {
@@ -83,5 +85,33 @@ export const useCartStore = create((set, get) => ({
       total = subtotal - discount;
     }
     set({ subtotal, total });
+  },
+  getMyCoupon: async () => {
+    try {
+      const response = await axios.get('/coupons');
+      set({ coupon: response.data });
+    } catch (error) {
+      console.log('Error in getMyCoupon', error);
+      toast.error(
+        error?.response?.data?.message ||
+          'An error occured while trying to fetch your coupon'
+      );
+    }
+  },
+  applyCoupon: async (code) => {
+    try {
+      const response = await axios.post('/coupons/validate', { code });
+      set({ coupon: response.data, isCouponApplied: true });
+      get().calculateTotals();
+      toast('Coupon applied successfully');
+    } catch (error) {
+      console.log('Error in applyCoupon', error);
+      toast.error(error.response?.data?.message || 'Failed to apply coupon');
+    }
+  },
+  removeCoupon: () => {
+    set({ coupon: null, isCouponApplied: false });
+    get().calculateTotals();
+    toast.success('Coupon removed');
   },
 }));

@@ -1,13 +1,28 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCartStore } from '../stores/useCartStore';
 import { Copy } from 'lucide-react';
 
 const GiftCouponCard = () => {
   const [userInputCode, setUserInputCode] = useState('');
-  const { coupon, isCouponApplied } = useCartStore();
-  const handleApplyCoupon = () => {};
-  const handleRemoveCoupon = () => {};
+  const { coupon, isCouponApplied, applyCoupon, getMyCoupon, removeCoupon } =
+    useCartStore();
+  const handleApplyCoupon = () => {
+    if (!userInputCode) return;
+    applyCoupon(userInputCode);
+  };
+  const handleRemoveCoupon = async () => {
+    await removeCoupon();
+    setUserInputCode('');
+  };
+
+  useEffect(() => {
+    getMyCoupon();
+  }, [getMyCoupon]);
+
+  useEffect(() => {
+    if (coupon) setUserInputCode(coupon.code);
+  }, [coupon]);
   return (
     <motion.div
       className='space-y-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-sm sm:p-6'

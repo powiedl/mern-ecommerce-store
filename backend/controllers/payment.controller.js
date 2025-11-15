@@ -18,10 +18,11 @@ export const createCheckoutSession = async (req, res) => {
           currency: 'eur',
           product_data: {
             name: product.name,
-            image: [product.image],
+            images: [product.image],
           },
           unit_amount: amount,
         },
+        quantity: product.quantity || 1,
       };
     });
     let coupon = null;
@@ -71,7 +72,11 @@ export const createCheckoutSession = async (req, res) => {
       // create a coupon for the next purchase, if the current purchase is over 200 Euros
       await createNewCoupon(user._id);
     }
-    res.status(200).json({ id: session.id, totalAmount: totalAmount / 100 });
+    res.status(200).json({
+      id: session.id,
+      totalAmount: totalAmount / 100,
+      url: session.url,
+    });
   } catch (error) {
     console.log('Error in createCheckoutSession controller', error.message);
     res.status(500).json({ message: 'Server error', error: error.message });
@@ -98,7 +103,7 @@ export const checkoutSuccess = async (req, res) => {
       const products = JSON.parse(session.metadata.products);
       const newOrder = new Order({
         user: session.metadata.userId,
-        products: products.map((p) => ({
+        products: products.map((product) => ({
           product: product.id,
           quantity: product.quantity,
           price: product.price,
@@ -122,13 +127,15 @@ export const checkoutSuccess = async (req, res) => {
 
 async function createStripeCoupon(discountPercentage) {
   const coupon = await stripe.coupons.create({
-    precent_off: discountPercentage,
+    percent_off: discountPercentage,
     duration: 'once',
   });
   return coupon.id;
 }
 
 async function createNewCoupon(userId) {
+  // a user can only have one coupon at a time, so we need to delete an existing one before we can create a new one
+  await Coupon.findOneAndDelete({ userId });
   const newCoupon = new Coupon({
     code: 'GIFT' + Math.random().toString(36).substring(2, 8).toUpperCase(),
     discountPercentage: 10,
