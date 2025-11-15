@@ -1,5 +1,6 @@
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 import authRoutes from './routes/auth.route.js';
 import productRoutes from './routes/product.route.js';
 import cartRoutes from './routes/cart.route.js';
@@ -9,7 +10,8 @@ import analyticsRoutes from './routes/analytics.route.js';
 import { connectDB } from './lib/db.js';
 import env from './lib/env.js';
 
-const { PORT } = env;
+const { PORT, NODE_ENV } = env;
+const __dirname = path.resolve();
 
 const app = express();
 app.use(express.json({ limit: '5mb' }));
@@ -21,6 +23,15 @@ app.use('/api/cart', cartRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/analytics', analyticsRoutes);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/dist')));
+
+  console.log('In PRODUCTION');
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '/frontend', 'dist', 'index.html'));
+  });
+}
 
 app.listen(5000, () => {
   console.log(`Server is running on port ${PORT}`);
