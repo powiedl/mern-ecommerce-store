@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useCartStore } from '../stores/useCartStore';
-import { Copy } from 'lucide-react';
 
 const GiftCouponCard = () => {
   const [userInputCode, setUserInputCode] = useState('');

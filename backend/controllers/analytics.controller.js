@@ -68,14 +68,15 @@ async function getDailySalesData(startDate, endDate) {
   ]);
   const dateArray = getDatesInRange(startDate, endDate);
 
-  return dateArray.map((date) => {
+  const result = dateArray.map((date) => {
     const foundData = dailySalesData.find((item) => item._id === date);
     return {
       date,
       sales: foundData?.sales || 0,
-      revenue: foundData?.sales || 0,
+      revenue: foundData?.revenue || 0,
     };
   });
+  return result;
 }
 
 function getDatesInRange(startDate, endDate) {
@@ -85,4 +86,5 @@ function getDatesInRange(startDate, endDate) {
     dates.push(currentDate.toISOString().split('T')[0]);
     currentDate.setDate(currentDate.getDate() + 1);
   }
+  return dates;
 }
